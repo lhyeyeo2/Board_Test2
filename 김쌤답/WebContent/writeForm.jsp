@@ -20,52 +20,69 @@
      ref=Integer.parseInt(request.getParameter("ref"));
      reStep=Integer.parseInt(request.getParameter("reStep"));
      reLevel=Integer.parseInt(request.getParameter("reLevel"));
+     strV="[답변]";
+     %>
+      <p>답글쓰기</p>
+      <%
+    }
+    else{
+    %>
+    	<p>글쓰기</p>
+    	<%
     }
 %>
 
-<p>글쓰기</p>
-<form action="writePro.jsp" method="post" name="writeform" onsubmit="return writeSave()">
+<form action="writePro.jsp" method="post" name="writeform" enctype="multipart/form-data" onsubmit="return writeSave()">
 	<input type="hidden" name="num" value="<%=num%>">
 	<input type="hidden" name="ref" value="<%=ref%>">
 	<input type="hidden" name="reStep" value="<%=reStep%>">
 	<input type="hidden" name="reLevel" value="<%=reLevel%>">
 <table>
 <tr>
-  <td align="right" colspan="2" bgcolor="<%=value_c%>">
+  <th align="right" colspan="2" bgcolor="<%=value_c%>">
     <a href="list.jsp">글목록</a>
+  </th>
+</tr>
+<tr>
+	<th bgcolor="<%=value_c%>" >이름</th>
+	<td align="left"><input type="text" size="10" maxlength="10" name="writer"
+	  ></td>
+</tr>
+<tr>
+  <th bgcolor="<%=value_c%>">제목</th>
+  <td align="left">
+  <input type="text" size="40" maxlength="50" name="subject"
+    value="<%=strV %>"></td>
+</tr>
+<tr>
+  <th bgcolor="<%=value_c%>">email</th>
+  <td align="left"><input type="text" size="40" maxlength="30" name="email"
+   style="ime-mode:inactive;"></td>
+</tr>
+<tr>
+  <th bgcolor="<%=value_c%>">내용</th>
+  <td align="left"><textarea rows="13" cols="40" style="resize:none" name="content"></textarea></td>
+</tr>
+<tr>
+  <th bgcolor="<%=value_c%>">파일추가</th>
+  <td align="left"><input type="file" name="filename">
   </td>
 </tr>
 <tr>
-	<td bgcolor="<%=value_c%>" >이름</td>
-	<td align="left"><input type="text" size="10" maxlength="10" name="writer"></td>
+  <th bgcolor="<%=value_c%>">비밀번호</th>
+  <td align="left"><input type="password" size="8" maxlength="12" name="passwd"></td>
 </tr>
 <tr>
-  <td bgcolor="<%=value_c%>">제목</td>
-  <td align="left"><input type="text" size="40" maxlength="50" name="subject"></td>
-</tr>
-<tr>
-  <td bgcolor="<%=value_c%>">email</td>
-  <td align="left"><input type="text" size="40" maxlength="50" name="email"></td>
-</tr>
-<tr>
-  <td bgcolor="<%=value_c%>">내용</td>
-  <td align="left"><textarea rows="13" cols="40" name="content"></textarea></td>
-</tr>
-<tr>
-  <td bgcolor="<%=value_c%>">비밀번호</td>
-  <td align="left"><input type="password" size="40" maxlength="50" name="passwd"></td>
-</tr>
-<tr>
-  <td colspan="2" bgcolor="<%=value_c%>">
+  <th colspan="2" bgcolor="<%=value_c%>">
     <input type="submit" value="글쓰기">
     <input type="reset" value="다시작성">
     <input type="button" value="목록보기" onClick="window.location='list.jsp'">
-  </td>
+  </th>
 </tr>
 </table>
 </form>
 
-
+<p> <%=request.getRemoteAddr() %></p>
 <%
   } catch(Exception e) {
 	  

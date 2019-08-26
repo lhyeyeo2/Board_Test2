@@ -21,3 +21,10 @@ function writeSave(){
 		return false;
 	}
 }
+function deleteSave(){
+  if(!document.delForm.passwd.value) {
+    alert("비밀번호를 입력하시오");
+    document.delForm.passwd.focus();
+    return false;
+    }
+  }

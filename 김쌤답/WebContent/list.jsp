@@ -126,6 +126,12 @@ for(int i=0; i<articleList.size(); i++){
   }
 %>
 
+<table>
+  <tr>
+      <td align="center"><input type="text" name="searchwd"><a href="search.jsp">찾기</a></td>
+  </tr>
+</table>
+
 <% } %>
 
 

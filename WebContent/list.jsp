@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" %>
 <%@ page import="board.*" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ include file="color.jspf" %>
 <%!
 int pageSize=10;
+int pageBlock = 3;
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//전자를  import 해온다.
+
 %>
 
 <% 
@@ -21,22 +22,20 @@ int startRow = (currPage-1) *pageSize +1;
 int endRow = currPage*pageSize;
 int count=0;
 int number=0;
-//List라는 자료형?은 <%@ page import="java.util.List"  관련있음
+
 List<BoardDataBean> articleList = null;
 
 BoardDBBean dbPro = BoardDBBean.getInstance();
 count = dbPro.getArticleCount();
 if (count>0) {
-	dbPro.getArticles(startRow, endRow);
-	//오라클이라 endRow씀
+	articleList = dbPro.getArticles(startRow, endRow);
+
 }
 number=count-(currPage-1)*pageSize;
 %>
 
 
-
-<!-- currPage 뭐다? 오타조심.. 그줄이 뭐랑 닮았다?
-짜놨던코드를 가져올꺼임 내용 놓쳤다(-) -->
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -69,41 +68,75 @@ number=count-(currPage-1)*pageSize;
       <th align="center"  width="100" >IP</th>    
     </tr>
 <%
-//for(articleList)
 for(int i=0; i<articleList.size(); i++){ 
 	  BoardDataBean article=articleList.get(i);
 %>    
  <tr height="30">
   <td width="50"><%=number--%></td>
   <td width="250" align="left"> 
-  <% //요기서 6줄이상은 %태그 잘 끊어야함. html이냐 아니냐 따라서
+  <% 
   int wid=0;
   if(article.getReLevel()>0){
 	  wid= 5*(article.getReLevel());
 	  %>
 	  <img src="image/level.png" width="<%=wid%>" height="16">
 	  <img src="image/re.png">
-	  <% 
-	  } else {
-		%>
-	  <img src="image/lavel.png" width="<%=wid %>" height= "16">
-	  <% 
+	  <%
+  } else {
+	  %>
+    <img src="image/level.png" width="<%=wid%>" height="16">
+    <%
   }
   
   %>
+      <a href="content.jsp?num=<%=article.getNum() %>&pageNum=<%=currPage%>">
   <%=article.getSubject() %>
+      </a>
   </td>
   <td><%=article.getWriter() %></td>
-   <td><%=article.getRegDate() %></td>
+   <td><%=sdf.format(article.getRegDate()) %></td>
     <td><%=article.getReadCount() %></td>
     <td><%=article.getIp() %></td>
         
   
  </tr>   
 <% } %>  
+
+</table>
+<%
+  int pageCount= count/pageSize +(count % pageSize == 0 ? 0 : 1);
+  
+  int startPage = 1;  // 일단 시작 페이지를 1로 초기화
+  if(currPage % pageBlock != 0 ) 
+    startPage = (int)(currPage/pageBlock)*pageBlock+1;
+  else
+    startPage = ((int)(currPage/pageBlock)-1)*pageBlock+1;
+  
+  %> <p><%=startPage%></p> <p><%=currPage%></p><%
+  
+		  int endPage = startPage + pageBlock - 1;  // 10개 단위로 더해서  endpage
+  if (endPage > pageCount)   //  그 값이 총페이지 보다 크면 endpage를 총 페이지로 바꿈.
+    endPage = pageCount;
+  
+  if(startPage > pageBlock){
+	  %>
+	   <a href="list.jsp?pageNum=<%=startPage - pageBlock%>">[이전]</a>
+	   <%
+  }
+  for(int i=startPage; i<=endPage; i++) {
+	  %>
+	  <a href="list.jsp?pageNum=<%= i %>">[<%= i %>]</a>
+    <%
+  }
+  if(endPage < pageCount) {
+	  %>
+     <a href="list.jsp?pageNum=<%=startPage + pageBlock%>">[다음]</a>
+     <%
+  }
+%>
+
+
 <% } %>
-<!-- /td 앞에 %태그 있단거 -->
-<!-- 전자의 number-- 는 후위감소 이고 이유는 놓침. 2가 순서상 제목이란거랑 상관있나? -->
 
 </body>
 </html>

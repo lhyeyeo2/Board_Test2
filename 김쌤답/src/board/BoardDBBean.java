@@ -54,8 +54,8 @@ public class BoardDBBean {
 				re_level=0;
 			}
 			sql="insert into eboard "
-					+ " (num,writer,email,subject,passwd,reg_date,ref,re_step,re_level,content,ip)"
-					+ " values (?,?,?,?,?,?,?,?,?,?,?)";
+					+ " (num,writer,email,subject,passwd,reg_date,ref,re_step,re_level,content,filename, filesize,ip)"
+					+ " values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setInt(1,number);
 			pstmt.setString(2,article.getWriter());
@@ -67,7 +67,9 @@ public class BoardDBBean {
 			pstmt.setInt(8,re_step);
 			pstmt.setInt(9,re_level);
 			pstmt.setString(10,article.getContent());
-			pstmt.setString(11,article.getIp());
+			pstmt.setString(11,article.getFilename());
+			pstmt.setLong(12,article.getFilesize());
+			pstmt.setString(13,article.getIp());
 			pstmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -91,7 +93,8 @@ public class BoardDBBean {
 			conn=getConnection();
 			sql="select * from "
 					+ " (select "
-					+ " ROWNUM rnum,num,writer,email,subject,passwd,reg_date,readcount,ref,re_step,re_level,content,ip"
+					+ " ROWNUM rnum,num,writer,email,subject,passwd,reg_date,"
+					+ " readcount,ref,re_step,re_level,content,ip "
 					+ " from "
 					+ " (select * from eboard order by ref desc, re_step asc) "
 					+ " eboard)"
@@ -185,6 +188,8 @@ public class BoardDBBean {
                 article.setReStep(rs.getInt("re_step"));
 				article.setReLevel(rs.getInt("re_level"));
                 article.setContent(rs.getString("content"));
+                article.setFilename(rs.getString("filename"));
+                article.setFilesize(rs.getLong("filesize"));
 			    article.setIp(rs.getString("ip")); 
 			}
         } catch(Exception e) {
@@ -233,7 +238,7 @@ public class BoardDBBean {
         }
         return article;
 	}
-
+	
 	public int updateArticle(BoardDataBean article) throws Exception {
 		Connection conn=null;
 		PreparedStatement pstmt=null;
@@ -251,14 +256,16 @@ public class BoardDBBean {
 				dbpasswd = rs.getString("passwd");
 				if(dbpasswd.contentEquals(article.getPasswd())) {
 					// update
-					sql="update eboard set writer=?, email=?, subject=?, content=? "
+					sql="update eboard set writer=?, email=?, subject=?, content=?,REG_DATE=?,ip=? "
 							+ " where num=?";
 					pstmt=conn.prepareStatement(sql);
 					pstmt.setString(1,article.getWriter());
 					pstmt.setString(2,article.getEmail());
 					pstmt.setString(3,article.getSubject());
 					pstmt.setString(4,article.getContent());
-					pstmt.setInt(5,article.getNum());
+					pstmt.setTimestamp(5,article.getRegDate());
+					pstmt.setString(6,article.getIp());
+					pstmt.setInt(7,article.getNum());
 					pstmt.executeUpdate();
 					result = 1;
 				}
@@ -279,6 +286,47 @@ public class BoardDBBean {
         return result;
 	}
 	
+	public int deleteArticle(int num, String passwd) throws Exception {
+		Connection conn=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+        String sql="";
+		String dbpasswd=""; 
+        int result=-1;
+        if (passwd.length() > 12) {
+        	return 2;
+        }
+        try {
+			conn=getConnection();
+			pstmt = conn.prepareStatement("select passwd from eboard where num=?");
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				dbpasswd = rs.getString("passwd");
+				if(dbpasswd.contentEquals(passwd)) {
+					// delete
+					sql="delete from eboard where num=?";
+					pstmt=conn.prepareStatement(sql);
+					pstmt.setInt(1,num);
+					pstmt.executeUpdate();
+					result = 1;
+				}
+				else {
+					result = 0;
+				}
+			}
+    	} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs!=null)
+				try {rs.close();} catch(SQLException e) {e.printStackTrace();}
+			if(pstmt!=null)
+				try {pstmt.close();} catch(SQLException e) {e.printStackTrace();}
+			if(conn!=null)
+				try {conn.close();} catch(SQLException e) {e.printStackTrace();}
+		}
+        return result;
+	}
 	
 	
 }

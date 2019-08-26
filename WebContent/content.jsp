@@ -48,14 +48,14 @@
 </tr>
 <tr height="30">
   <td colspan="4" bgcolor="<%=value_c%>">
-    <input type="button" value="글수정"
-     onclick="document.location.href='updateForm.jsp?num=<%= article.getNum() %>&pageNum=<%= pageNum %>'">
-    <input type="button" value="글삭제"
-     onclick="document.location.href='deleteForm.jsp?num=<%= article.getNum() %>&pageNum=<%= pageNum %>'">
+    <input type="button" value="글수정" 
+    onclick="document.location.href='updateForm.jsp?num=<%= article.getNum() %>'">
+    <input type="button" value="글삭제" 
+    onclick="document.location.href='deleteForm.jsp?num=<%= article.getNum() %>'">
     <input type="button" value="답글쓰기"
-     onclick="document.location.href='writeForm.jsp?num=<%= article.getNum() %>&ref=<%= ref %>&reStep=<%= reStep %>&reLevel=<%= reLevel %>'">
-    <input type="button" value="글목록"
-     onclick="document.location.href='list.jsp?pageNum=<%= pageNum %>'">
+     onclick="document.location.href='writeForm.jsp?num=<%= article.getNum()%>&ref=<%= article.getRef()%>&reStep=<%= article.getReStep()%>&reLevel=<%= article.getReLevel()%>'">
+    <input type="button" value="글목록" 
+    onclick="document.location.href='list.jsp?pageNum=<%= pageNum %>'">
   </td>
 </tr>
 </table>

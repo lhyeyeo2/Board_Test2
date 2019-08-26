@@ -13,7 +13,6 @@
 </head>
 <body bgcolor="<%=bodyback_c%>">
 <%
-String pageNum=request.getParameter("pageNum");
 int num=Integer.parseInt(request.getParameter("num"));
 try {
 	BoardDBBean dbPro = BoardDBBean.getInstance();
@@ -21,7 +20,7 @@ try {
 %>
 
 <p>글수정</p>
-<form action="updatePro.jsp?pageNum=<%=pageNum%>" method="post" name="writeform" onsubmit="return writeSave()">
+<form action="updatePro.jsp" method="post" name="writeform" onsubmit="return writeSave()">
      <input type="hidden" name="num" value="<%=article.getNum()%>"></td>
 <table>
 <tr>
@@ -43,7 +42,7 @@ try {
 </tr>
 <tr>
   <td bgcolor="<%=value_c%>">email</td>
-  <td align="left"><input type="text" size="40" maxlength="30" name="email"
+  <td align="left"><input type="text" size="40" maxlength="50" name="email"
    value="<%= article.getEmail() %>" ></td>
 </tr>
 <tr>
@@ -52,7 +51,7 @@ try {
 </tr>
 <tr>
   <td bgcolor="<%=value_c%>">비밀번호</td>
-  <td align="left"><input type="password" size="8" maxlength="15" name="passwd"></td>
+  <td align="left"><input type="password" size="40" maxlength="50" name="passwd"></td>
 </tr>
 <tr>
   <td colspan="2" bgcolor="<%=value_c%>">

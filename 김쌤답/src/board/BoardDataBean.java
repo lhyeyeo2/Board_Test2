@@ -14,6 +14,8 @@ public class BoardDataBean {
 	private int reStep;
 	private int reLevel;
 	private String content;
+	private String filename;
+	private long filesize;
 	private String ip;
 	public int getNum() {
 		return num;
@@ -80,6 +82,18 @@ public class BoardDataBean {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getFilename() {
+		return filename;
+	}
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+	public long getFilesize() {
+		return filesize;
+	}
+	public void setFilesize(long filesize) {
+		this.filesize = filesize;
 	}
 	public String getIp() {
 		return ip;
