@@ -39,6 +39,8 @@ number=count-(currPage-1)*pageSize;
 </head>
 <body bgcolor="<%=bodyback_c%>">
 <p>글목록(전체 글:<%=count %>)</p>
+<div align="center" style="position:relative; width:800px; height:10000px;">
+<div style="position:absolute; width:800px; left:0; top:0;" >
 <table>
 	<tr>
 		<td align="right" bgcolor="<%=value_c %>">
@@ -46,6 +48,8 @@ number=count-(currPage-1)*pageSize;
 		</td>
 	</tr>
 </table>
+</div>
+<div style="position:absolute; width:800px; top:24px;" >
 <% if (count == 0) { %>
 <table>
 	<tr>
@@ -133,8 +137,9 @@ for(int i=0; i<articleList.size(); i++){
 </table>
 
 <% } %>
-
-
+</div>
+</div>
+</div>
 </body>
 </html>
 

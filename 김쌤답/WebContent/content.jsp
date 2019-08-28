@@ -10,8 +10,17 @@
 <meta charset="UTF-8">
 <title>게시글 읽기</title>
 <link href="style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+  function down(filename){
+     document.downForm.filename.value=filename;
+     document.downForm.submit();
+  }
+</script>
 </head>
 <body bgcolor="<%=bodyback_c%>">
+<form name=downForm action="download.jsp" method="post">
+  <input type="hidden" name="filename">
+</form>
 <%
   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
   int num = Integer.parseInt(request.getParameter("num"));
@@ -22,9 +31,11 @@
 	  int ref=article.getRef();
 	  int reStep=article.getReStep();
 	  int reLevel=article.getReLevel();
+		String filename = article.getFilename();
+		long filesize = article.getFilesize();
 %>
 <p>글내용 보기</p>
-<form>
+<form name="bodyForm">
 <table>
 <tr height="30">
   <td align="center" width="125" bgcolor="<%=value_c%>">글번호</td>
@@ -46,6 +57,14 @@
   <td align="center" bgcolor="<%=value_c%>">글내용</td>
   <td align="left" colspan="3" ><pre><%= article.getContent() %></pre> </td>
 </tr>
+<tr>
+  <td align="center" bgcolor="<%=value_c%>">첨부파일</td>
+  <td align="left" colspan="3" >
+  <% if(filename==null || filename.equals("")) { %>등록된 파일이 없습니다. 
+	<% } else { %><a href="javascript:down('<%=filename %>')"><%=filename %>&nbsp;&nbsp;&nbsp;&nbsp;(<%=filesize %>bytes)</a>
+	<% } %>
+  </td>
+</tr>
 <tr height="30">
   <td colspan="4" bgcolor="<%=value_c%>">
     <input type="button" value="글수정"
@@ -59,15 +78,8 @@
   </td>
 </tr>
 </table>
-
-
-
-
-
-
-
-
 </form>
+
 <%	  
   } catch (Exception e) { }
 %>

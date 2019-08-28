@@ -21,23 +21,25 @@ String encoding = "utf-8";
 FileRenamePolicy policy = new DefaultFileRenamePolicy();      
 String fileName = "filename";
 
-MultipartRequest multi = 
-    new MultipartRequest(request, saveDirectory, maxPostSize, encoding, policy);      
-File file = multi.getFile(fileName);
-fileName = file.getName();
-long fileSize = file.length();
-
-if(fileName == null){
-  out.println("파일 업로드 실패");
-}else{
-	article.setNum(Integer.parseInt(multi.getParameter("num")));
-	article.setWriter(multi.getParameter("writer"));
-	article.setContent(multi.getParameter("content"));
-	article.setSubject(multi.getParameter("subject"));
-	article.setPasswd(multi.getParameter("passwd"));
-  article.setFilename(fileName);
-  article.setFilesize(fileSize);
+MultipartRequest multi = new MultipartRequest(request, saveDirectory, maxPostSize, encoding, policy);      
+File file = multi.getFile(fileName);  // client의 파일경로+이름 즉 c:\직박구리\abc.jpg
+if(file == null){
+	  out.println("파일 추가 없음");
+} else {
+		fileName = file.getName();  // server 파일경로+이름 즉 /FileUpload/abc.jpg
+		long fileSize = file.length();  // server들어가 있는 파일의 사이즈
+		if(fileName == null){
+		  out.println("파일 업로드 실패");
+		}else{
+		  article.setFilename(fileName);
+		  article.setFilesize(fileSize);
+		}
 }
+article.setNum(Integer.parseInt(multi.getParameter("num")));
+article.setWriter(multi.getParameter("writer"));
+article.setContent(multi.getParameter("content"));
+article.setSubject(multi.getParameter("subject"));
+article.setPasswd(multi.getParameter("passwd"));
 %>
 
 <%
